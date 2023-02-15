@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "417046294928",
+    "firebase_url": "https://soildata-7a0fa-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "soildata-7a0fa",
+    "storage_bucket": "soildata-7a0fa.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417046294928:android:d972cd77a83d7ae32b4315",
+        "android_client_info": {
+          "package_name": "com.android.sims_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417046294928-d75jc73dmmbgv6gblgqg23aroebcg5im.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD92l8iitkkdwIszJk20XTx3Gnr-Z7fXgA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417046294928-d75jc73dmmbgv6gblgqg23aroebcg5im.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417046294928:android:9b9436da166e9aea2b4315",
+        "android_client_info": {
+          "package_name": "com.app.SoilData"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "417046294928-d75jc73dmmbgv6gblgqg23aroebcg5im.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD92l8iitkkdwIszJk20XTx3Gnr-Z7fXgA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "417046294928-d75jc73dmmbgv6gblgqg23aroebcg5im.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
