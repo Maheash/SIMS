@@ -57,13 +57,13 @@ class _LoginScreenState extends State<LoginScreen> {
     if (output == "success") {
       setState(() {
         loading = false;
+        Utils().successMessage("Welcome!");
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => HomeScreen()));
       });
     } else {
       //error
-      Utils().toastMessage(
-          "Error occured while Login. Enter the credentials correctly");
+      Utils().toastMessage(output);
     }
   }
 
