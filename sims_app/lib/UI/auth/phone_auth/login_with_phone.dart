@@ -1,4 +1,4 @@
-import 'package:SIMS/UI/auth/verify_code.dart';
+import 'package:SIMS/UI/auth/phone_auth/verify_code.dart';
 import 'package:SIMS/UI/utils/utils.dart';
 import 'package:SIMS/UI/widgets/round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,25 +29,30 @@ class _LogInWithPhoneNumberState extends State<LogInWithPhoneNumber> {
           ),
           TextFormField(
             controller: phoneNumberController,
-            keyboardType: TextInputType.number,
+            keyboardType: TextInputType.text,
             decoration: InputDecoration(hintText: "+91 9987654321"),
           ),
           SizedBox(
             height: 30,
           ),
           RoundButton(
-            loading: loading,
+              loading: loading,
               onTap: () {
                 setState(() {
                   loading = true;
                 });
                 auth.verifyPhoneNumber(
                     phoneNumber: phoneNumberController.text,
-                    verificationCompleted: (_) {},
+                    verificationCompleted: (_) {
+                      setState(() {
+                        loading = false;
+                      });
+                    },
                     verificationFailed: (e) {
                       setState(() {
                         loading = false;
                       });
+                      debugPrint("failed $e");
                       Utils().toastMessage(e.toString());
                     },
                     codeSent: (String verificationId, int? token) {
@@ -55,13 +60,14 @@ class _LogInWithPhoneNumberState extends State<LogInWithPhoneNumber> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => VerifyCodeScreen(
-                                    VerificationId: verificationId,
+                                    verificationId: verificationId,
                                   )));
                       setState(() {
                         loading = false;
                       });
                     },
                     codeAutoRetrievalTimeout: (e) {
+                      debugPrint('timeout $e');
                       setState(() {
                         loading = false;
                       });
