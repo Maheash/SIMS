@@ -37,7 +37,7 @@ dependencies:
   cloud_firestore: 
   firebase_auth: ^4.1.0
   fluttertoast: ^8.1.3 
-   
+  syncfusion_flutter_gauges:
   cupertino_icons: ^1.0.2
 
 dev_dependencies:
