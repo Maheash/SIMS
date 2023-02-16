@@ -108,19 +108,25 @@ class _LoginScreenState extends State<LoginScreen> {
         return true;
       },
       child: Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: Text(
-            'SIMS - Login',
-          ),
-        ),
+        // appBar: AppBar(
+        //   automaticallyImplyLeading: false,
+        //   centerTitle: true,
+        //   title: Text(
+        //     'SIMS - Login',
+        //   ),
+        // ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                Text("S.I.M.S - Login", style: TextStyle(color: Colors.deepPurple, fontSize: 30, fontWeight: FontWeight.normal),),
+                const SizedBox(height: 20,),
+                const Icon(Icons.login_rounded,
+                     color: Colors.deepPurple,
+                     size: 100,),
+                     const SizedBox(height: 20,),
                 Form(
                   key: _formKey,
                   child: Column(children: [
@@ -156,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         }),
                   ]),
                 ),
-                const SizedBox(height: 50),
+                const SizedBox(height: 30),
                 RoundButton(
                   title: 'Login',
                   loading: loading,
