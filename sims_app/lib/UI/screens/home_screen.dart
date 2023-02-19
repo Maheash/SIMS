@@ -20,7 +20,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool loading = false;
   final auth = FirebaseAuth.instance;
-  final ref = FirebaseDatabase.instance.ref('realtimeSoilData/l3ghZjCm9Rf2F8LChrT2YaWZvOI3/Water Distance');
+  final ref = FirebaseDatabase.instance
+      .ref('realtimeSoilData/l3ghZjCm9Rf2F8LChrT2YaWZvOI3/Water Distance');
   final _valRef = FirebaseDatabase.instance
       .ref('realtimeSoilData/l3ghZjCm9Rf2F8LChrT2YaWZvOI3/Soil Moisture');
   double soilMoisture = 0;
@@ -44,7 +45,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
     return _userId;
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -156,6 +156,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ref.onValue.listen((event) {
                     waterDistance =
                         double.parse(event.snapshot.value.toString());
+                    if (waterDistance > 50) {
+                      waterDistance = 50;
+                    }
                     // value = tankCapacity - waterDistance;
                     // waterDistance = value;
                     debugPrint("Water left: $waterDistance");
@@ -193,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )
                                 ],
                               )),
-                               GaugeAnnotation(
+                          GaugeAnnotation(
                             widget: Text("Water level",
                                 style: TextStyle(
                                     color: Colors.black, fontSize: 15)),
