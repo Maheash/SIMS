@@ -20,18 +20,31 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool loading = false;
   final auth = FirebaseAuth.instance;
-  final ref = FirebaseDatabase.instance
-      .ref('realtimeSoilData/l3ghZjCm9Rf2F8LChrT2YaWZvOI3/Water Distance');
+  final ref = FirebaseDatabase.instance.ref('realtimeSoilData/l3ghZjCm9Rf2F8LChrT2YaWZvOI3/Water Distance');
   final _valRef = FirebaseDatabase.instance
       .ref('realtimeSoilData/l3ghZjCm9Rf2F8LChrT2YaWZvOI3/Soil Moisture');
   double soilMoisture = 0;
   double waterDistance = 0;
   double tankCapacity = 50; //cm
   double value = 0;
+  String _userId = " ";
+  late DatabaseReference _databaseReference;
 
   void initState() {
     super.initState();
+    getCurrentUser();
   }
+
+  Future getCurrentUser() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _userId = user.uid;
+      });
+    }
+    return _userId;
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +135,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           GaugeAnnotation(
                             widget: Text("Moisture level: $soilMoisture%",
                                 style: TextStyle(
-                                    color: Colors.deepPurple, fontSize: 15)),
+                                    color: Colors.black, fontSize: 15)),
                             positionFactor: 1,
                             angle: 90,
                           ),
@@ -180,6 +193,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   )
                                 ],
                               )),
+                               GaugeAnnotation(
+                            widget: Text("Water level",
+                                style: TextStyle(
+                                    color: Colors.black, fontSize: 15)),
+                            positionFactor: 1,
+                            angle: 90,
+                          ),
                           GaugeAnnotation(
                             angle: 124,
                             positionFactor: 1.1,
