@@ -1,4 +1,5 @@
 import 'package:SIMS/UI/auth/phone_auth/login_with_phone.dart';
+import 'package:SIMS/UI/screens/dashboard.dart';
 import 'package:SIMS/UI/screens/home_screen.dart';
 import 'package:SIMS/UI/widgets/round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,7 +60,7 @@ class _LoginScreenState extends State<LoginScreen> {
         loading = false;
         Utils().successMessage("Welcome!");
         Navigator.push(
-            context, MaterialPageRoute(builder: (context) => HomeScreen()));
+            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
       });
     } else {
       //error
@@ -67,38 +68,6 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  // void Login() async{
-  //   setState(() {
-  //     loading = true;
-  //   });
-  //     _auth
-  //       .signInWithEmailAndPassword(
-  //           email: emailController.text,
-  //           password: passwordController.text.toString())
-  //       .then((value) {
-  //     Utils().toastMessage(value.user!.email.toString());
-  //     Navigator.push(
-  //         context, MaterialPageRoute(builder: (context) => HomeScreen()));
-  //     setState(() {
-  //       loading = false;
-  //     });
-  //   }).onError((error, stackTrace) {
-  //     if(error.runtimeType==FirebaseAuthException){
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content:
-  //               Text(error.toString().replaceRange(0, 14, '').split(']')[1]),
-  //           backgroundColor: Theme.of(context).colorScheme.error,
-  //         ),
-  //       );
-  //     }
-  //     debugPrint(error.toString());
-  //     Utils().toastMessage(error.toString());
-  //     setState(() {
-  //       loading = false;
-  //     });
-  //   });
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -108,13 +77,6 @@ class _LoginScreenState extends State<LoginScreen> {
         return true;
       },
       child: Scaffold(
-        // appBar: AppBar(
-        //   automaticallyImplyLeading: false,
-        //   centerTitle: true,
-        //   title: Text(
-        //     'SIMS - Login',
-        //   ),
-        // ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Column(

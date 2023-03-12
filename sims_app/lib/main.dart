@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:SIMS/UI/splash_screen.dart';
 import 'package:SIMS/value.dart';
 // import 'package:SIMS/value.dart';
@@ -47,7 +46,7 @@ class MyApp extends StatelessWidget {
           } else if (snapshot.hasData) {
             return SplashScreen();
           } else {
-            return Center(child: CircularProgressIndicator());
+            return Center(child: null);
           }
         },
       ),

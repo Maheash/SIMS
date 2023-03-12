@@ -1,12 +1,13 @@
-import 'dart:async';
 import 'package:SIMS/UI/auth/login_screen.dart';
-import 'package:SIMS/UI/utils/uid.dart';
+import 'package:SIMS/UI/screens/profile_screen.dart';
+import 'package:SIMS/UI/screens/soil_moisture.dart';
+import 'package:SIMS/UI/screens/water_level.dart';
+import 'package:SIMS/UI/utils/navbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 import '../utils/utils.dart';
+import 'dashboard.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -16,222 +17,41 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool loading = false;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final auth = FirebaseAuth.instance;
-  final ref = FirebaseDatabase.instance.ref('realtimeSoilData');
-  String UserId = '';
-
-  double soilMoisture = 0.0;
-  double waterDistance = 0;
-  double tankCapacity = 50; //cm
-  double value = 0;
-
-  void initState() {
-    final user = FirebaseAuth.instance.currentUser;
-    setState(() {
-      UserId = user!.uid;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: const Text("S.I.M.S"),
-        actions: [
-          IconButton(
-              onPressed: () {
-                auth.signOut().then((value) {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => LoginScreen()));
-                }).onError((error, stackTrace) {
-                  Utils().toastMessage(error.toString());
-                });
-              },
-              icon: const Icon(Icons.logout_outlined)),
-          const SizedBox(width: 10),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            const Text(
-              "Realtime data from the Field",
-              style: TextStyle(color: Colors.deepPurple, fontSize: 20),
-            ),
-            const SizedBox(height: 20),
-            Expanded(
-                child: StreamBuilder(
-              stream: ref.onValue,
-              builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                if (!snapshot.hasData) {
-                  debugPrint("$soilMoisture");
-                  return CircularProgressIndicator();
-                } else {
-                  ref.child(UserId).child('Soil Moisture').onValue.listen((event) {
-                    soilMoisture =
-                        double.parse(event.snapshot.value.toString());
-                    debugPrint(UserId);
-                    debugPrint("Moisture: $soilMoisture");
-                  });
-
-                  return SfRadialGauge(
-                    axes: <RadialAxis>[
-                      RadialAxis(
-                        minimum: 0,
-                        maximum: 100,
-                        interval: 10,
-                        ranges: [
-                          GaugeRange(
-                            startValue: 0,
-                            endValue: 20,
-                            color: Colors.orange,
-                          ),
-                          GaugeRange(
-                            startValue: 20,
-                            endValue: 60,
-                            color: Colors.green,
-                          ),
-                          GaugeRange(
-                            startValue: 60,
-                            endValue: 75,
-                            color: Colors.yellow,
-                          ),
-                          GaugeRange(
-                              startValue: 75, endValue: 100, color: Colors.blue)
-                        ],
-                        pointers: <GaugePointer>[
-                          NeedlePointer(
-                            value: soilMoisture,
-                            enableAnimation: true,
-                          )
-                        ],
-                        annotations: [
-                          GaugeAnnotation(
-                            widget: Text("Moisture level: $soilMoisture%",
-                                style: TextStyle(
-                                    color: Colors.black, fontSize: 15)),
-                            positionFactor: 1,
-                            angle: 90,
-                          ),
-                        ],
-                      )
-                    ],
-                  );
-                }
-              },
-            )),
-            Expanded(
-                child: StreamBuilder(
-                    stream: ref.onValue,
-                    builder: (context, AsyncSnapshot<dynamic> snapshot) {
-                      if (!snapshot.hasData) {
-                        return CircularProgressIndicator();
-                      }
-                      else {
-                        ref.child(UserId).child('Water Distance').onValue.listen((event) {
-                          // ref.child(UserId).child('Tank Capacity')
-                          double val = double.parse(event.snapshot.value.toString());
-                          waterDistance = 50 - val;
-                          if (waterDistance > 50) {
-                            waterDistance = 50;
-                          }
-                          // value = tankCapacity - waterDistance;
-                          // waterDistance = value;
-                          debugPrint("Water left: $waterDistance");
-                        });
-
-                      return SfRadialGauge(axes: <RadialAxis>[
-                        RadialAxis(
-                            showLabels: false,
-                            showTicks: false,
-                            radiusFactor: 0.8,
-                            maximum: tankCapacity,
-                            axisLineStyle: const AxisLineStyle(
-                                cornerStyle: CornerStyle.startCurve,
-                                thickness: 5),
-                            annotations: <GaugeAnnotation>[
-                              GaugeAnnotation(
-                                  angle: 90,
-                                  widget: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: <Widget>[
-                                      Text('$waterDistance',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
-                                              fontSize: 20)),
-                                      Padding(
-                                        padding: const EdgeInsets.fromLTRB(
-                                            0, 2, 0, 0),
-                                        child: Text(
-                                          'cm',
-                                          style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                              fontStyle: FontStyle.italic,
-                                              fontSize: 12),
-                                        ),
-                                      )
-                                    ],
-                                  )),
-                              GaugeAnnotation(
-                                widget: Text("Water level",
-                                    style: TextStyle(
-                                        color: Colors.black, fontSize: 15)),
-                                positionFactor: 1,
-                                angle: 90,
-                              ),
-                              GaugeAnnotation(
-                                angle: 124,
-                                positionFactor: 1.1,
-                                widget:
-                                    Text('0', style: TextStyle(fontSize: 12)),
-                              ),
-                              GaugeAnnotation(
-                                angle: 54,
-                                positionFactor: 1.1,
-                                widget: Text('$tankCapacity',
-                                    style: TextStyle(fontSize: 12)),
-                              ),
-                            ],
-                            pointers: <GaugePointer>[
-                              RangePointer(
-                                value: waterDistance,
-                                width: 18,
-                                pointerOffset: -6,
-                                cornerStyle: CornerStyle.bothCurve,
-                                color: Color.fromARGB(255, 79, 180, 243),
-                                gradient: SweepGradient(colors: <Color>[
-                                  Color.fromARGB(255, 79, 180, 243),
-                                  Color.fromARGB(255, 78, 164, 245)
-                                ], stops: <double>[
-                                  0.25,
-                                  0.75
-                                ]),
-                              ),
-                              MarkerPointer(
-                                value: waterDistance,
-                                color: Colors.white,
-                                markerType: MarkerType.circle,
-                              ),
-                            ])
-                      ]);
-                    }
+      key: _scaffoldKey,
+        appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
+          title: Text("S.I.M.S Home"),
+          leading: IconButton(
+          icon: Icon(Icons.menu),
+          onPressed: () {
+            _scaffoldKey.currentState?.openDrawer();
+          },
+        ),
+          actions: [
+            Builder(
+              builder: (context) {
+                return IconButton(
+                    onPressed: () {
+                      auth.signOut().then((value) {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (context) => LoginScreen()));
+                      }).onError((error, stackTrace) {
+                        Utils().toastMessage(error.toString());
+                      });
                     },
-                    )),
-            const SizedBox(
-              height: 20,
-            )
+                    icon: const Icon(Icons.logout_outlined));
+              }
+            ),
+            const SizedBox(width: 10),
           ],
         ),
-      ),
-    );
+        drawer: const AppDrawer(),
+        body: Text("This is the home page"),        );
   }
 }
