@@ -1,4 +1,3 @@
-import 'package:SIMS/UI/screens/home_screen.dart';
 import 'package:SIMS/UI/screens/profile_screen.dart';
 import 'package:SIMS/UI/screens/soil_moisture.dart';
 import 'package:SIMS/UI/screens/water_level.dart';
@@ -7,6 +6,9 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter/material.dart';
+import 'package:SIMS/UI/screens/home_screen.dart';
+
+import '../screens/history_screen.dart';
 
 class AppDrawer extends StatefulWidget {
   const AppDrawer({super.key});
@@ -96,6 +98,14 @@ class _AppDrawerState extends State<AppDrawer> {
             onTap: () {
               Navigator.of(context).pushReplacement(MaterialPageRoute(
                   builder: (BuildContext context) => ProfileScreen()));
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.data_exploration),
+            title: Text("History"),
+            onTap: () {
+              Navigator.of(context).pushReplacement(MaterialPageRoute(
+                  builder: (BuildContext context) => MyWidget()));
             },
           )
         ],

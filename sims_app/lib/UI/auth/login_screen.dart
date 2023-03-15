@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:SIMS/UI/auth/phone_auth/login_with_phone.dart';
 import 'package:SIMS/UI/screens/dashboard.dart';
 import 'package:SIMS/UI/screens/home_screen.dart';
+import 'package:SIMS/UI/utils/uid.dart';
 import 'package:SIMS/UI/widgets/round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -22,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final _auth = FirebaseAuth.instance;
+  String userId = " ";
 
   @override
   void dispose() {
@@ -59,15 +63,15 @@ class _LoginScreenState extends State<LoginScreen> {
       setState(() {
         loading = false;
         Utils().successMessage("Welcome!");
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => const HomeScreen()));
+        // sendUserId();
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const HomeScreen()));
       });
     } else {
       //error
       Utils().toastMessage(output);
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -83,12 +87,24 @@ class _LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("S.I.M.S - Login", style: TextStyle(color: Colors.deepPurple, fontSize: 30, fontWeight: FontWeight.normal),),
-                const SizedBox(height: 20,),
-                const Icon(Icons.login_rounded,
-                     color: Colors.deepPurple,
-                     size: 100,),
-                     const SizedBox(height: 20,),
+                Text(
+                  "S.I.M.S - Login",
+                  style: TextStyle(
+                      color: Colors.deepPurple,
+                      fontSize: 30,
+                      fontWeight: FontWeight.normal),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                const Icon(
+                  Icons.login_rounded,
+                  color: Colors.deepPurple,
+                  size: 100,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 Form(
                   key: _formKey,
                   child: Column(children: [
