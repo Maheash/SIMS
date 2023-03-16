@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:SIMS/UI/utils/navbar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +42,12 @@ class _SoilMoistureState extends State<SoilMoisture> {
       });
     });
   }
+
+  // void addData(){
+  //   FirebaseFirestore.instance
+  //       .collection(UserId)
+  //       .add({'Soil Moisture': soilMoisture, 'Timestamp': DateTime.now()});
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +112,7 @@ class _SoilMoistureState extends State<SoilMoisture> {
                     soilMoisture =
                         double.parse(soilMoisture.toStringAsFixed(3));
                     debugPrint("Moisture: $soilMoisture");
+                    // addData();
                   });
 
                   return SfRadialGauge(

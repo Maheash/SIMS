@@ -21,7 +21,6 @@
 //   final auth = FirebaseAuth.instance;
 //   String UserId = '';
 
-  
 //   @override
 //   void initState() {
 //     super.initState();
@@ -55,104 +54,103 @@
 //     });
 //   }
 
+// @override
+// void initState() {
+//   super.initState();
+//   final user = FirebaseAuth.instance.currentUser;
+//   UserId = user!.uid;
+//   debugPrint("$UserId");
+//   databaseReference
+//       .child(UserId)
+//       .child('Soil Moisture')
+//       .onValue
+//       .listen((event) {
+//     var snapshot = event.snapshot;
+//     var data = snapshot.value;
+//     setState(() {
+//       history.add(data);
+//     });
+//   });
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   final user = FirebaseAuth.instance.currentUser;
-  //   UserId = user!.uid;
-  //   debugPrint("$UserId");
-  //   databaseReference
-  //       .child(UserId)
-  //       .child('Soil Moisture')
-  //       .onValue
-  //       .listen((event) {
-  //     var snapshot = event.snapshot;
-  //     var data = snapshot.value;
-  //     setState(() {
-  //       history.add(data);
-  //     });
-  //   });
+//   // Set a timer to clear the history list after 5 hours
+//   _timer = Timer(Duration(hours: 5), () {
+//     setState(() {
+//       history.clear();
+//     });
+//   });
+// }
 
-  //   // Set a timer to clear the history list after 5 hours
-  //   _timer = Timer(Duration(hours: 5), () {
-  //     setState(() {
-  //       history.clear();
-  //     });
-  //   });
-  // }
+// @override
+// void dispose() {
+//   super.dispose();
+//   _timer.cancel(); // Cancel the timer to avoid memory leaks
+// }
 
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _timer.cancel(); // Cancel the timer to avoid memory leaks
-  // }
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   // var chartData = _getChartData();
-  //   return Scaffold(
-  //     key: _scaffoldKey,
-  //     appBar: AppBar(
-  //       centerTitle: true,
-  //       automaticallyImplyLeading: false,
-  //       title: Text("History"),
-  //       leading: IconButton(
-  //         icon: Icon(Icons.menu),
-  //         onPressed: () {
-  //           _scaffoldKey.currentState?.openDrawer();
-  //         },
-  //       ),
-  //     ),
-  //     drawer: const AppDrawer(),
-      //   //    body: Center(
-      //   //     child: Column(
-      //   //       mainAxisAlignment: MainAxisAlignment.center,
-      //   //       children: [
-      //   //         Text(
-      //   //           'Last 1 hour',
-      //   //           style: TextStyle(fontSize: 18),
-      //   //         ),
-      //   //         SizedBox(height: 10),
-      //   //         Expanded(
-      //   //           child: charts.TimeSeriesChart(
-      //   //             _getChartData(),
-      //   //             animate: true,
-      //   //             dateTimeFactory: charts.LocalDateTimeFactory(),
-      //   //             primaryMeasureAxis: charts.NumericAxisSpec(
-      //   //               tickProviderSpec: charts.BasicNumericTickProviderSpec(
-      //   //                 zeroBound: true,
-      //   //               ),
-      //   //             ),
-      //   //             domainAxis: charts.DateTimeAxisSpec(
-      //   //               renderSpec: charts.SmallTickRendererSpec(
-      //   //                 labelStyle: charts.TextStyleSpec(
-      //   //                   fontSize: 12,
-      //   //                   color: charts.MaterialPalette.black,
-      //   //                 ),
-      //   //                 lineStyle: charts.LineStyleSpec(
-      //   //                   thickness: 0,
-      //   //                   color: charts.MaterialPalette.transparent,
-      //   //                 ),
-      //   //                 tickLengthPx: 0,
-      //   //               ),
-      //   //               tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
-      //   //                 hour: charts.TimeFormatterSpec(
-      //   //                   format: 'h:mm a',
-      //   //                   transitionFormat: 'h:mm a',
-      //   //                 ),
-      //   //               ),
-      //   //             ),
-      //   //             behaviors: [
-      //   //               charts.PanAndZoomBehavior(),
-      //   //             ],
-      //   //           ),
-      //   //         ),
-      //   //       ],
-      //   //     ),
-      //   //   ),
-      //   // );
-      // }
+// @override
+// Widget build(BuildContext context) {
+//   // var chartData = _getChartData();
+//   return Scaffold(
+//     key: _scaffoldKey,
+//     appBar: AppBar(
+//       centerTitle: true,
+//       automaticallyImplyLeading: false,
+//       title: Text("History"),
+//       leading: IconButton(
+//         icon: Icon(Icons.menu),
+//         onPressed: () {
+//           _scaffoldKey.currentState?.openDrawer();
+//         },
+//       ),
+//     ),
+//     drawer: const AppDrawer(),
+//   //    body: Center(
+//   //     child: Column(
+//   //       mainAxisAlignment: MainAxisAlignment.center,
+//   //       children: [
+//   //         Text(
+//   //           'Last 1 hour',
+//   //           style: TextStyle(fontSize: 18),
+//   //         ),
+//   //         SizedBox(height: 10),
+//   //         Expanded(
+//   //           child: charts.TimeSeriesChart(
+//   //             _getChartData(),
+//   //             animate: true,
+//   //             dateTimeFactory: charts.LocalDateTimeFactory(),
+//   //             primaryMeasureAxis: charts.NumericAxisSpec(
+//   //               tickProviderSpec: charts.BasicNumericTickProviderSpec(
+//   //                 zeroBound: true,
+//   //               ),
+//   //             ),
+//   //             domainAxis: charts.DateTimeAxisSpec(
+//   //               renderSpec: charts.SmallTickRendererSpec(
+//   //                 labelStyle: charts.TextStyleSpec(
+//   //                   fontSize: 12,
+//   //                   color: charts.MaterialPalette.black,
+//   //                 ),
+//   //                 lineStyle: charts.LineStyleSpec(
+//   //                   thickness: 0,
+//   //                   color: charts.MaterialPalette.transparent,
+//   //                 ),
+//   //                 tickLengthPx: 0,
+//   //               ),
+//   //               tickFormatterSpec: charts.AutoDateTimeTickFormatterSpec(
+//   //                 hour: charts.TimeFormatterSpec(
+//   //                   format: 'h:mm a',
+//   //                   transitionFormat: 'h:mm a',
+//   //                 ),
+//   //               ),
+//   //             ),
+//   //             behaviors: [
+//   //               charts.PanAndZoomBehavior(),
+//   //             ],
+//   //           ),
+//   //         ),
+//   //       ],
+//   //     ),
+//   //   ),
+//   // );
+// }
 
 //   List<charts.Series<ChartData, DateTime>> _getChartData() {
 //     List<ChartData> chartData = [];
@@ -187,8 +185,7 @@
 //   }
 // }
 
-
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -198,19 +195,30 @@ class MyWidget extends StatefulWidget {
 }
 
 class _MyWidgetState extends State<MyWidget> {
-  int _counter = 0;
+  void turnOnRelay() async {
+    var url = Uri.parse('http://192.168.1.34:80/on');
+    var response = await http.get(url );
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
+  }
 
-  void _updateFirestore() {
-    FirebaseFirestore.instance.collection('myCollection').doc('myDoc').update({
-      'counter': _counter + 1,
-    });
+  void turnOffRelay() async {
+    var url = Uri.parse('http://192.168.1.34:80/off');
+    var response = await http.get(url as Uri);
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
+  }
+
+  void initState() {
+    super.initState();
+    turnOnRelay();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Firestore Update Example'),
+        title: Text('Http testing'),
       ),
       body: Center(
         child: Column(
@@ -219,24 +227,9 @@ class _MyWidgetState extends State<MyWidget> {
             Text(
               'Counter:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          setState(() {
-            _counter++;
-          });
-          _updateFirestore();
-        },
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
       ),
     );
   }
 }
-
