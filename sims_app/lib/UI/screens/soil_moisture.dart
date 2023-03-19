@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:SIMS/UI/utils/navbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +10,9 @@ import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 import '../auth/login_screen.dart';
 import '../utils/utils.dart';
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 
 class SoilMoisture extends StatefulWidget {
   const SoilMoisture({super.key});
@@ -41,6 +43,23 @@ class _SoilMoistureState extends State<SoilMoisture> {
         debugPrint("Tank Capacity: $tankCapacity");
       });
     });
+  }
+
+  void turnOnRelay() async {
+    // var url = Uri.parse('http://192.168.1.34:80/on');
+    // var response = await http.get(url);
+    // debugPrint('Response status: ${response.statusCode}');
+    // debugPrint('Response body: ${response.body}');
+
+    Utils().successMessage("Motor On");
+  }
+
+  void turnOffRelay() async {
+    // var url = Uri.parse('http://192.168.1.34:80/off');
+    // var response = await http.get(url as Uri);
+    // debugPrint('Response status: ${response.statusCode}');
+    // debugPrint('Response body: ${response.body}');
+    Utils().toastMessage("Motor Off");
   }
 
   // void addData(){
@@ -81,20 +100,20 @@ class _SoilMoistureState extends State<SoilMoisture> {
       ),
       drawer: const AppDrawer(),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(
-              height: 20,
+              height: 30,
             ),
             const Text(
               "Realtime data from the Field",
               style: TextStyle(color: Colors.deepPurple, fontSize: 20),
             ),
-            const SizedBox(height: 20),
-            Expanded(
+            SizedBox(height: 20),
+            Center(
                 child: StreamBuilder(
               stream: ref.onValue,
               builder: (context, AsyncSnapshot<dynamic> snapshot) {
@@ -124,11 +143,11 @@ class _SoilMoistureState extends State<SoilMoisture> {
                         ranges: [
                           GaugeRange(
                             startValue: 0,
-                            endValue: 20,
+                            endValue: 25,
                             color: Colors.orange,
                           ),
                           GaugeRange(
-                            startValue: 20,
+                            startValue: 25,
                             endValue: 60,
                             color: Colors.green,
                           ),
@@ -161,8 +180,39 @@ class _SoilMoistureState extends State<SoilMoisture> {
                 }
               },
             )),
-            const SizedBox(
-              height: 20,
+            SizedBox(height: 15),
+            Text(
+              "Need to water the Field? Try turning on the motor",
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    turnOnRelay();
+                  },
+                  child: Icon(Icons.play_arrow),
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(20),
+                    minimumSize: Size(20, 20),
+                  ),
+                ),
+                SizedBox(width: 18),
+                ElevatedButton(
+                  onPressed: () {
+                    turnOffRelay();
+                  },
+                  child: Icon(Icons.stop),
+                  style: ElevatedButton.styleFrom(
+                    shape: CircleBorder(),
+                    padding: EdgeInsets.all(20),
+                    minimumSize: Size(20, 20),
+                  ),
+                )
+              ],
             )
           ],
         ),

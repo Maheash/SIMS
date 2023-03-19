@@ -100,14 +100,14 @@ class _AppDrawerState extends State<AppDrawer> {
                   builder: (BuildContext context) => ProfileScreen()));
             },
           ),
-          ListTile(
-            leading: Icon(Icons.data_exploration),
-            title: Text("History"),
-            onTap: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) => MyWidget()));
-            },
-          )
+          // ListTile(
+          //   leading: Icon(Icons.data_exploration),
+          //   title: Text("History"),
+          //   onTap: () {
+          //     Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //         builder: (BuildContext context) => HistoryScreen()));
+          //   },
+          // )
         ],
       ),
     );

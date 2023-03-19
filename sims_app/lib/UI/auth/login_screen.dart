@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:SIMS/UI/auth/phone_auth/login_with_phone.dart';
-import 'package:SIMS/UI/screens/dashboard.dart';
 import 'package:SIMS/UI/screens/home_screen.dart';
 import 'package:SIMS/UI/utils/uid.dart';
 import 'package:SIMS/UI/widgets/round_button.dart';

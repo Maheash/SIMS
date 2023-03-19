@@ -185,51 +185,76 @@
 //   }
 // }
 
-import 'package:http/http.dart' as http;
-import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_database/firebase_database.dart';
+// import 'package:flutter/material.dart';
+// import 'package:workmanager/workmanager.dart';
 
-class MyWidget extends StatefulWidget {
-  @override
-  _MyWidgetState createState() => _MyWidgetState();
-}
+// import '../utils/uid.dart';
 
-class _MyWidgetState extends State<MyWidget> {
-  void turnOnRelay() async {
-    var url = Uri.parse('http://192.168.1.34:80/on');
-    var response = await http.get(url );
-    debugPrint('Response status: ${response.statusCode}');
-    debugPrint('Response body: ${response.body}');
-  }
+// class HistoryScreen extends StatefulWidget {
+//   @override
+//   HistoryScreenState createState() => HistoryScreenState();
+// }
 
-  void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.1.34:80/off');
-    var response = await http.get(url as Uri);
-    debugPrint('Response status: ${response.statusCode}');
-    debugPrint('Response body: ${response.body}');
-  }
+// class HistoryScreenState extends State<HistoryScreen> {
+//   String UserId=" ";
+//   Workmanager workmanager = Workmanager();
 
-  void initState() {
-    super.initState();
-    turnOnRelay();
-  }
+//   @override
+//   void initState() {
+//     super.initState();
+//     final user = FirebaseAuth.instance.currentUser;
+//     UserId = user!.uid;
+    
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Http testing'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Counter:',
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
+//     // Initialize the workmanager
+//     workmanager.initialize(callbackDispatcher);
+
+//     // Register a periodic task to run every 5 minutes
+//     workmanager.registerPeriodicTask(
+//       'saveData',
+//       'saveDataBackground',
+//       frequency: Duration(minutes: 5),
+//       initialDelay: Duration(minutes: 5),
+//     );
+//   }
+
+  
+// void callbackDispatcher() {
+//     workmanager.executeTask((taskName, inputData) async {
+//       // Get the current soil moisture value and timestamp
+//       double currentValue =
+//           50.0; // Replace with your actual code to get the value
+//       String timestamp = DateTime.now().toString();
+
+//       // Save the current data to the historical location in the database
+//       DatabaseReference databaseRef = FirebaseDatabase.instance
+//           .ref('historicaldata')
+//           .child(UserId);
+//       String? key = databaseRef.push().key;
+//       await databaseRef
+//           .child(key!)
+//           .set({'value': currentValue, 'timestamp': timestamp});
+
+//       return Future.value(true);
+//     });
+//   }
+
+
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Soil Moisture'),
+//       ),
+//       body: Center(
+//         child: Text(
+//           'Monitoring soil moisture...',
+//           style: TextStyle(fontSize: 20),
+//         ),
+//       ),
+//     );
+//   }
+// }

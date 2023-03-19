@@ -41,6 +41,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   http:
   charts_flutter:
+  workmanager:
 
 dev_dependencies:
   flutter_test:
