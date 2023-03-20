@@ -90,75 +90,201 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   Center(
                       child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Need to water the Field? Try turning on the motor",
+                        "\t\t\tHere are some realtime updates from the field that might be helpful!",
                         style:
                             TextStyle(color: Colors.deepPurple, fontSize: 20),
-                      ),
-                      FloatingActionButton.extended(
-                        onPressed: turnOnRelay,
-                        label: Text("Turn On"),
                       ),
                     ],
                   )),
                   SizedBox(height: 20),
-                  Card(
-                    child: StreamBuilder<dynamic>(
-                      stream: databaseRef
-                          .child(UserId)
-                          .child('Soil Mositure')
-                          .onValue,
-                      builder: (BuildContext context,
-                          AsyncSnapshot<dynamic> snapshot) {
-                        if (snapshot.hasData) {
-                          int moistureLevel = snapshot.data.snapshot.value ?? 0;
-                          String moistureText;
-                          if (moistureLevel < 20) {
-                            moistureText = 'Dry';
-                          } else if (moistureLevel > 20 && moistureLevel < 60) {
-                            moistureText = 'Bit moist';
-                          } else if (moistureLevel > 60 && moistureLevel < 75) {
-                            moistureText = 'Moist';
-                          } else if (moistureLevel > 75 && moistureLevel <= 100) {
-                            moistureText = 'Over watered';
-                          }
-                           else {
-                            moistureText = 'Not connected';
-                          }
-                          return Padding(
-                            padding: EdgeInsets.all(16.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text('Soil Moisture',
-                                    style: TextStyle(fontSize: 20)),
-                                SizedBox(height: 10.0),
-                                Text(
-                                  moistureText,
-                                  style: TextStyle(
-                                    fontSize: 44.0,
-                                    fontWeight: FontWeight.bold,
-                                    color: moistureText == 'Dry'
-                                        ? Colors.red
-                                        : moistureText == 'Moist'
-                                            ? Colors.green
-                                            : Colors.orange,
-                                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 20,
+                      ),
+                      Card(
+                        child: StreamBuilder<dynamic>(
+                          stream: databaseRef
+                              .child(UserId)
+                              .child('Soil Moisture')
+                              .onValue,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.hasData) {
+                              double moistureLevel =
+                                  snapshot.data.snapshot.value ?? 0;
+                              String moistureText;
+                              if (moistureLevel < 20) {
+                                moistureText = 'Dry';
+                              } else if (moistureLevel > 20 &&
+                                  moistureLevel < 60) {
+                                moistureText = 'Bit moist';
+                              } else if (moistureLevel > 60 &&
+                                  moistureLevel < 75) {
+                                moistureText = 'Moist';
+                              } else if (moistureLevel > 75 &&
+                                  moistureLevel <= 100) {
+                                moistureText = 'Over watered';
+                              } else {
+                                moistureText = 'Not connected';
+                              }
+                              return Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Soil Moisture',
+                                        style: TextStyle(fontSize: 20)),
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      moistureText,
+                                      style: TextStyle(
+                                        fontSize: 35.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: moistureText == 'Dry'
+                                            ? Colors.red
+                                            : moistureText == 'Moist'
+                                                ? Colors.green
+                                                : Colors.orange,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                          );
-                        } else {
-                          return Center(child: CircularProgressIndicator());
-                        }
-                      },
-                    ),
+                              );
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                      ),
+                      SizedBox(width: 0),
+                      Card(
+                        child: StreamBuilder<dynamic>(
+                          stream: databaseRef
+                              .child(UserId)
+                              .child('Temperature')
+                              .onValue,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.hasData) {
+                              double tempLevel =
+                                  snapshot.data.snapshot.value ?? 0;
+                              return Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Temperature',
+                                        style: TextStyle(fontSize: 20)),
+                                    SizedBox(height: 10.0),
+                                    Text(
+                                      "$tempLevel°C",
+                                      style: TextStyle(
+                                        fontSize: 35.0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(width: 18),
+                      Card(
+                        child: StreamBuilder<dynamic>(
+                          stream: databaseRef
+                              .child(UserId)
+                              .child('Tank Volume')
+                              .onValue,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.hasData) {
+                              double waterLeft =
+                                  snapshot.data.snapshot.value ?? 0 as double;
+                              waterLeft = 250 - waterLeft;
+                              waterLeft =
+                                  double.parse(waterLeft.toStringAsFixed(2));
+                              String waterText;
+                              // if (waterLeft == 250.00) {
+                              //   waterText = 'Tank Full';
+                              // } else if (waterLeft < 250.00 &&
+                              //     waterLeft > 187.5) {
+                              //   if (waterLeft < 250.00 && waterLeft > 240) {
+                              //     waterText = "The tank is almost full";
+                              //   } else {
+                              //     waterText =
+                              //         'More than 3/4 of the tank is full';
+                              //   }
+                              // } else if (waterLeft > 125 && waterLeft > 187.5) {
+                              //   waterText =
+                              //       'Tank is at more than half of its capacity';
+                              // } else if (waterLeft > 62.5 && waterLeft < 125) {
+                              //   waterText =
+                              //       'Only one quarter of the tank is full. Check tank';
+                              // } else if (waterLeft < 62.5) {
+                              //   waterText = 'Water is almost empty!!';
+                              // } else {
+                              //   waterText = 'Check connection';
+                              // }
+                              return Padding(
+                                padding: EdgeInsets.all(16.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Water in the Tank',
+                                        style: TextStyle(fontSize: 20)),
+                                    SizedBox(height: 10.0),
+                                    Text("$waterLeft litres left",
+                                        style: TextStyle(
+                                            fontSize: 35.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.blue)),
+                                    SizedBox(height: 10),
+                                    // Text(
+                                    //   waterText,
+                                    //   style: TextStyle(
+                                    //     fontSize: 20.0,
+                                    //     fontWeight: FontWeight.bold,
+                                    //     color: waterText ==
+                                    //             'Only 1/4 of the tank is left with water. Take action'
+                                    //         ? Colors.red
+                                    //         : waterText ==
+                                    //                 'Only 1/2 of the tank is left with water'
+                                    //             ? Colors.orange
+                                    //             : waterText ==
+                                    //                         '3/4 of the tank is full' &&
+                                    //                     waterText ==
+                                    //                         'Tank is at more than half of its capacity'
+                                    //                 ? Colors.green
+                                    //                 : waterText == 'Tank Full'
+                                    //                     ? Colors.blue
+                                    //                     : Colors.orange,
+                                    //   ),
+                                    // ),
+                                  ],
+                                ),
+                              );
+                            } else {
+                              return Center(child: CircularProgressIndicator());
+                            }
+                          },
+                        ),
+                      )
+                    ],
                   )
                 ])));
   }
