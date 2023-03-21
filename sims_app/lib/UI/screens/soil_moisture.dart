@@ -24,6 +24,8 @@ class SoilMoisture extends StatefulWidget {
 }
 
 class _SoilMoistureState extends State<SoilMoisture> {
+  bool isOn = false;
+  late Function currentFunction;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool loading = false;
   final auth = FirebaseAuth.instance;
@@ -48,27 +50,29 @@ class _SoilMoistureState extends State<SoilMoisture> {
   }
 
   void turnOnRelay() async {
-    // var url = Uri.parse('http://192.168.1.34:80/on');
-    // var response = await http.get(url);
-    // debugPrint('Response status: ${response.statusCode}');
-    // debugPrint('Response body: ${response.body}');
+    var url = Uri.parse('http://192.168.1.34:80/on');
+    var response = await http.get(url);
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
 
     Utils().successMessage("Motor On");
   }
 
   void turnOffRelay() async {
-    // var url = Uri.parse('http://192.168.1.34:80/off');
-    // var response = await http.get(url as Uri);
-    // debugPrint('Response status: ${response.statusCode}');
-    // debugPrint('Response body: ${response.body}');
+    var url = Uri.parse('http://192.168.1.34:80/off');
+    var response = await http.get(url as Uri);
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
     Utils().toastMessage("Motor Off");
   }
 
-  // void addData(){
-  //   FirebaseFirestore.instance
-  //       .collection(UserId)
-  //       .add({'Soil Moisture': soilMoisture, 'Timestamp': DateTime.now()});
-  // }
+  void toggleButton() {
+    setState(() {
+      isOn = !isOn;
+    });
+
+    isOn ? turnOnRelay() : turnOffRelay();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -188,39 +192,29 @@ class _SoilMoistureState extends State<SoilMoisture> {
                 }
               },
             )),
-            SizedBox(height: 12),
+            SizedBox(height: 10),
             Text(
-              "Need to water the Field? Try turning the motor ON",
+              "Need to water the Field? Try turning the motor ON..",
               textAlign: TextAlign.justify,
               style: TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 13),
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    turnOnRelay();
+                    toggleButton();
                   },
-                  child: Icon(Icons.play_arrow),
+                  child: Icon(isOn
+                      ? Icons.stop
+                      : Icons.play_arrow_sharp),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
-                    padding: EdgeInsets.all(14),
+                    padding: EdgeInsets.all(18),
                     minimumSize: Size(10, 10),
                   ),
-                ),
-                SizedBox(width: 15),
-                ElevatedButton(
-                  onPressed: () {
-                    turnOffRelay();
-                  },
-                  child: Icon(Icons.stop),
-                  style: ElevatedButton.styleFrom(
-                    shape: CircleBorder(),
-                    padding: EdgeInsets.all(14),
-                    minimumSize: Size(10, 10),
-                  ),
-                )
+                ),                
               ],
             )
           ],

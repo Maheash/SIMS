@@ -190,7 +190,7 @@ class _WaterLevelState extends State<WaterLevel> {
               const SizedBox(
               height: 20,
             ),
-            Text("\t\t\tIn case of low level of water try to fill the tank asap.",
+            Text("\t\t\tTo avoid worst cases, make sure the tank is always available with enough water.",
             style: TextStyle(fontSize: 18),
             textAlign: TextAlign.justify)              
             ],

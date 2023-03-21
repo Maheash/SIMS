@@ -20,6 +20,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  bool isOn = false;
+  late Function currentFunction;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final auth = FirebaseAuth.instance;
   String UserId = " ";
@@ -43,10 +45,20 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.1.34:80/off');
-    var response = await http.get(url as Uri);
-    debugPrint('Response status: ${response.statusCode}');
-    debugPrint('Response body: ${response.body}');
+    // var url = Uri.parse('http://192.168.1.34:80/off');
+    // var response = await http.get(url as Uri);
+    // debugPrint('Response status: ${response.statusCode}');
+    // debugPrint('Response body: ${response.body}');
+
+    Utils().toastMessage("Motor Off");
+  }
+
+  void toggleButton() {
+    setState(() {
+      isOn = !isOn;
+    });
+
+    isOn ? turnOnRelay() : turnOffRelay();
   }
 
   @override
@@ -96,14 +108,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Card(
+                          shadowColor: Colors.blue,
                           child: Padding(
-                        padding: EdgeInsets.all(10),
-                        child: Text(
-                          "\t\t\tSIMS always monitors the field and the changes that take place get updated in realtime with the help of various sensors that are deployed in the field. \n\n\t\t\tHere are some quick updates from the field that might be helpful!",
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: 20),
-                        ),
-                      )),
+                            padding: EdgeInsets.all(10),
+                            child: Text(
+                              "\t\t\tSIMS always monitors the field and the changes that take place get updated in realtime with the help of various sensors that are deployed in the field. \n\n\t\t\tHere are some quick updates from the field that might be helpful!",
+                              textAlign: TextAlign.justify,
+                              style: TextStyle(fontSize: 20),
+                            ),
+                          )),
                     ],
                   )),
                   SizedBox(height: 20),
@@ -113,6 +126,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 20,
                       ),
                       Card(
+                        color: Color.fromARGB(255, 178, 252, 174),
+                        shadowColor: Color.fromARGB(255, 178, 252, 174),
                         child: StreamBuilder<dynamic>(
                           stream: databaseRef
                               .child(UserId)
@@ -144,23 +159,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Soil Moisture',
-                                        style: TextStyle(fontSize: 20)),
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                        )),
                                     SizedBox(height: 10.0),
                                     Text(
                                       moistureText,
                                       style: TextStyle(
-                                        fontSize: 35.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: moistureText == 'DRY'
-                                            ? Colors.red
-                                            : moistureText == 'A BIT MOIST'
-                                                ? Color.fromARGB(255, 8, 70, 10)
-                                                : moistureText == 'MOIST'
-                                                  ? Colors.teal
-                                                    : moistureText == 'OVER WATERED'
-                                                      ? Colors.blueGrey
-                                                      :Colors.yellow
-                                      ),
+                                          fontSize: 35.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: moistureText == 'DRY'
+                                              ? Colors.red
+                                              : moistureText == 'A BIT MOIST'
+                                                  ? Color.fromARGB(
+                                                      255, 8, 70, 10)
+                                                  : moistureText == 'MOIST'
+                                                      ? Colors.teal
+                                                      : moistureText ==
+                                                              'OVER WATERED'
+                                                          ? Colors.blueGrey
+                                                          : Colors.yellow),
                                     ),
                                   ],
                                 ),
@@ -173,6 +191,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       SizedBox(width: 0),
                       Card(
+                        color: Colors.yellowAccent,
+                        shadowColor: Colors.yellowAccent,
                         child: StreamBuilder<dynamic>(
                           stream: databaseRef
                               .child(UserId)
@@ -211,8 +231,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     children: [
                       SizedBox(width: 20),
-                      SizedBox(width: 310,
-                      child: Card(
+                      SizedBox(
+                        width: 310,
+                        child: Card(
+                          shadowColor: Color.fromARGB(255, 196, 216, 252),
+                          color: Color.fromARGB(255, 196, 216, 252),
                           child: StreamBuilder<dynamic>(
                             stream: databaseRef
                                 .child(UserId)
@@ -250,7 +273,49 @@ class _HomeScreenState extends State<HomeScreen> {
                               }
                             },
                           ),
-                        ),)
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(height: 8),
+                  Row(
+                    children: [
+                      SizedBox(width: 20),
+                      SizedBox(
+                        width: 310,
+                        child: Card(
+                          shadowColor: Colors.blue,
+                          child: Padding(
+                            padding: EdgeInsets.all(10),
+                            child: Column(children: [
+                              Text(
+                                "Motor controls",
+                                textAlign: TextAlign.justify,
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              SizedBox(height: 10),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      toggleButton();
+                                    },
+                                    child: Icon(isOn
+                                        ? Icons.stop
+                                        : Icons.play_arrow_sharp),
+                                    style: ElevatedButton.styleFrom(
+                                      shape: CircleBorder(),
+                                      padding: EdgeInsets.all(14),
+                                      minimumSize: Size(10, 10),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ]),
+                          ),
+                        ),
+                      ),
                     ],
                   )
                 ])));

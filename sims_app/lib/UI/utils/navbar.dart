@@ -66,7 +66,7 @@ class _AppDrawerState extends State<AppDrawer> {
                 fit: BoxFit.cover,
               )),
             ),
-            decoration: BoxDecoration(color: Colors.deepPurple),
+            decoration: BoxDecoration(color: Colors.blue),
           ),
           ListTile(
             leading: Icon(Icons.home),
