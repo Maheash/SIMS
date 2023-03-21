@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:SIMS/UI/auth/phone_auth/login_with_phone.dart';
 import 'package:SIMS/UI/screens/home_screen.dart';
-import 'package:SIMS/UI/utils/uid.dart';
 import 'package:SIMS/UI/widgets/round_button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -89,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Text(
                   "S.I.M.S - Login",
                   style: TextStyle(
-                      color: Colors.deepPurple,
+                      color: Colors.blue,
                       fontSize: 30,
                       fontWeight: FontWeight.normal),
                 ),
@@ -98,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 const Icon(
                   Icons.login_rounded,
-                  color: Colors.deepPurple,
+                  color: Colors.blue,
                   size: 100,
                 ),
                 const SizedBox(
@@ -161,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 50,
                     width: 150,
                     decoration: BoxDecoration(
-                        color: Colors.deepPurple,
+                        color: Colors.blue,
                         borderRadius: BorderRadius.circular(10)),
                     child: Center(
                         child: Text(

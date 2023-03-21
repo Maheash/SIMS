@@ -21,7 +21,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      body: Center(child: Text('Soil Monitoring Irrigation System',style: TextStyle(fontSize: 20))),
+      body: Center(
+        child: Text('Soil Monitoring Irrigation System',
+          style: TextStyle(
+            fontSize: 25,
+            ),  
+            textAlign: TextAlign.center)
+            ),
     );
   }
 }

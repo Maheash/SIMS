@@ -14,6 +14,8 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
+import '../widgets/round_button.dart';
+
 class SoilMoisture extends StatefulWidget {
   const SoilMoisture({super.key});
 
@@ -110,9 +112,15 @@ class _SoilMoistureState extends State<SoilMoisture> {
             ),
             const Text(
               "Realtime data from the Field",
-              style: TextStyle(color: Colors.deepPurple, fontSize: 20),
+              style: TextStyle(color: Colors.blue, fontSize: 20),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 15),
+            Text("\t\t\tThe Soil Moisture level of the field is measured continously and displayed in terms of percentage here.",
+            style: TextStyle(
+              fontSize: 18
+              ),
+              textAlign: TextAlign.justify),
+            SizedBox(height: 15),
             Center(
                 child: StreamBuilder(
               stream: ref.onValue,
@@ -180,12 +188,13 @@ class _SoilMoistureState extends State<SoilMoisture> {
                 }
               },
             )),
-            SizedBox(height: 15),
+            SizedBox(height: 12),
             Text(
-              "Need to water the Field? Try turning on the motor",
+              "Need to water the Field? Try turning the motor ON",
+              textAlign: TextAlign.justify,
               style: TextStyle(fontSize: 18),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 13),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -196,11 +205,11 @@ class _SoilMoistureState extends State<SoilMoisture> {
                   child: Icon(Icons.play_arrow),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
-                    minimumSize: Size(20, 20),
+                    padding: EdgeInsets.all(14),
+                    minimumSize: Size(10, 10),
                   ),
                 ),
-                SizedBox(width: 18),
+                SizedBox(width: 15),
                 ElevatedButton(
                   onPressed: () {
                     turnOffRelay();
@@ -208,8 +217,8 @@ class _SoilMoistureState extends State<SoilMoisture> {
                   child: Icon(Icons.stop),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
-                    padding: EdgeInsets.all(20),
-                    minimumSize: Size(20, 20),
+                    padding: EdgeInsets.all(14),
+                    minimumSize: Size(10, 10),
                   ),
                 )
               ],
