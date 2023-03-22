@@ -35,7 +35,7 @@ class _WaterLevelState extends State<WaterLevel> {
         UserId = user!.uid;
         ref.child(UserId).child('Tank Capacity').onValue.listen((event) {
           tankCapacity = double.parse(event.snapshot.value.toString());
-          debugPrint("Tank Capacity: $tankCapacity");
+          // debugPrint("Tank Capacity: $tankCapacity");
         });
       });
     }
@@ -105,7 +105,7 @@ class _WaterLevelState extends State<WaterLevel> {
                           double.parse(event.snapshot.value.toString());
                       tankVolume = tankCapacity - tankVolume;
                       tankVolume = double.parse(tankVolume.toStringAsFixed(3));
-                      debugPrint("Water left: $tankVolume");
+                      // debugPrint("Water left: $tankVolume");
                     });
 
                     return SfRadialGauge(axes: <RadialAxis>[

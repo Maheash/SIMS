@@ -36,19 +36,19 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void turnOnRelay() async {
-    // var url = Uri.parse('http://192.168.1.34:80/on');
-    // var response = await http.get(url);
-    // debugPrint('Response status: ${response.statusCode}');
-    // debugPrint('Response body: ${response.body}');
+    var url = Uri.parse('http://192.168.1.35/on');
+    var response = await http.get(url);
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
 
     Utils().successMessage("Motor On");
   }
 
   void turnOffRelay() async {
-    // var url = Uri.parse('http://192.168.1.34:80/off');
-    // var response = await http.get(url as Uri);
-    // debugPrint('Response status: ${response.statusCode}');
-    // debugPrint('Response body: ${response.body}');
+    var url = Uri.parse('http://192.168.1.35/off');
+    var response = await http.get(url as Uri);
+    debugPrint('Response status: ${response.statusCode}');
+    debugPrint('Response body: ${response.body}');
 
     Utils().toastMessage("Motor Off");
   }
@@ -108,6 +108,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Card(
+                        elevation: 8.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                           shadowColor: Colors.blue,
                           child: Padding(
                             padding: EdgeInsets.all(10),
@@ -119,80 +123,89 @@ class _HomeScreenState extends State<HomeScreen> {
                           )),
                     ],
                   )),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   Row(
                     children: [
-                      SizedBox(
-                        width: 20,
-                      ),
-                      Card(
-                        color: Color.fromARGB(255, 178, 252, 174),
-                        shadowColor: Color.fromARGB(255, 178, 252, 174),
-                        child: StreamBuilder<dynamic>(
-                          stream: databaseRef
-                              .child(UserId)
-                              .child('Soil Moisture')
-                              .onValue,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<dynamic> snapshot) {
-                            if (snapshot.hasData) {
-                              double moistureLevel =
-                                  snapshot.data.snapshot.value ?? 0;
-                              String moistureText;
-                              if (moistureLevel < 20) {
-                                moistureText = 'DRY';
-                              } else if (moistureLevel > 20 &&
-                                  moistureLevel < 60) {
-                                moistureText = 'A BIT MOIST';
-                              } else if (moistureLevel > 60 &&
-                                  moistureLevel < 75) {
-                                moistureText = 'MOIST';
-                              } else if (moistureLevel > 75 &&
-                                  moistureLevel <= 100) {
-                                moistureText = 'OVER WATERED';
-                              } else {
-                                moistureText = 'NOT CONNECTED';
-                              }
-                              return Padding(
-                                padding: EdgeInsets.all(16.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text('Soil Moisture',
+                      SizedBox(width:206,
+                      child: Card(
+                        elevation: 8.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          color: Color.fromARGB(255, 178, 252, 174),
+                          shadowColor: Color.fromARGB(255, 178, 252, 174),
+                          child: StreamBuilder<dynamic>(
+                            stream: databaseRef
+                                .child(UserId)
+                                .child('Soil Moisture')
+                                .onValue,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.hasData) {
+                                double moistureLevel =
+                                    (snapshot.data.snapshot.value ?? 0.00 as double).toDouble();
+                                String moistureText;
+                                if (moistureLevel < 20) {
+                                  moistureText = 'DRY';
+                                } else if (moistureLevel > 20 &&
+                                    moistureLevel < 60) {
+                                  moistureText = 'A BIT MOIST';
+                                } else if (moistureLevel > 60 &&
+                                    moistureLevel < 75) {
+                                  moistureText = 'MOIST';
+                                } else if (moistureLevel > 75 &&
+                                    moistureLevel <= 100) {
+                                  moistureText = 'OVER WATERED';
+                                } else {
+                                  moistureText = 'NOT CONNECTED';
+                                }
+                                return Padding(
+                                  padding: EdgeInsets.all(16.0),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text('Soil Moisture',
+                                          style: TextStyle(
+                                            fontSize: 16,
+                                          )),
+                                      SizedBox(height: 10.0),
+                                      Text(
+                                        moistureText,
                                         style: TextStyle(
-                                          fontSize: 20,
-                                        )),
-                                    SizedBox(height: 10.0),
-                                    Text(
-                                      moistureText,
-                                      style: TextStyle(
-                                          fontSize: 35.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: moistureText == 'DRY'
-                                              ? Colors.red
-                                              : moistureText == 'A BIT MOIST'
-                                                  ? Color.fromARGB(
-                                                      255, 8, 70, 10)
-                                                  : moistureText == 'MOIST'
-                                                      ? Colors.teal
-                                                      : moistureText ==
-                                                              'OVER WATERED'
-                                                          ? Colors.blueGrey
-                                                          : Colors.yellow),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            } else {
-                              return Center(child: CircularProgressIndicator());
-                            }
-                          },
+                                            fontSize: 35.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: moistureText == 'DRY'
+                                                ? Colors.red
+                                                : moistureText == 'A BIT MOIST'
+                                                    ? Color.fromARGB(
+                                                        255, 8, 70, 10)
+                                                    : moistureText == 'MOIST'
+                                                        ? Colors.teal
+                                                        : moistureText ==
+                                                                'OVER WATERED'
+                                                            ? Colors.blueGrey
+                                                            : Colors.yellow),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              } else {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              }
+                            },
+                          ),
                         ),
                       ),
-                      SizedBox(width: 0),
+                      SizedBox(width: 1),
                       Card(
-                        color: Colors.yellowAccent,
-                        shadowColor: Colors.yellowAccent,
+                        elevation: 8.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10.0),
+                        ),
+                        color: Colors.amberAccent,
+                        shadowColor: Colors.amberAccent,
                         child: StreamBuilder<dynamic>(
                           stream: databaseRef
                               .child(UserId)
@@ -209,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Temperature',
-                                        style: TextStyle(fontSize: 20)),
+                                        style: TextStyle(fontSize: 16)),
                                     SizedBox(height: 10.0),
                                     Text(
                                       "$tempLevel°C",
@@ -225,15 +238,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                           },
                         ),
-                      ),
+                      )
                     ],
                   ),
+                  SizedBox(height: 10),
                   Row(
                     children: [
-                      SizedBox(width: 20),
                       SizedBox(
-                        width: 310,
+                        width: 350,
                         child: Card(
+                          elevation: 8.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
                           shadowColor: Color.fromARGB(255, 196, 216, 252),
                           color: Color.fromARGB(255, 196, 216, 252),
                           child: StreamBuilder<dynamic>(
@@ -245,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
                                 double waterLeft =
-                                    snapshot.data.snapshot.value ?? 0 as double;
+                                    (snapshot.data.snapshot.value ?? 0 as double).toDouble();
                                 waterLeft = 250 - waterLeft;
                                 waterLeft =
                                     double.parse(waterLeft.toStringAsFixed(2));
@@ -277,14 +294,18 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ],
                   ),
-                  SizedBox(height: 8),
+                  SizedBox(height: 10),
                   Row(
                     children: [
-                      SizedBox(width: 20),
                       SizedBox(
-                        width: 310,
+                        width: 350,
                         child: Card(
-                          shadowColor: Colors.blue,
+                          elevation: 8.0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          color: Color.fromARGB(255, 200, 239, 218),
+                          shadowColor: Color.fromARGB(255, 200, 239, 218),
                           child: Padding(
                             padding: EdgeInsets.all(10),
                             child: Column(children: [

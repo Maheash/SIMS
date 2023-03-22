@@ -35,8 +35,6 @@ class _SoilMoistureState extends State<SoilMoisture> {
   double soilMoisture = 0.0;
   double tankVolume = 0.0;
   double tankCapacity = 0.0;
-  double value = 0;
-  String val = "";
 
   void initState() {
     final user = FirebaseAuth.instance.currentUser;
@@ -44,13 +42,13 @@ class _SoilMoistureState extends State<SoilMoisture> {
       UserId = user!.uid;
       ref.child(UserId).child('Tank Capacity').onValue.listen((event) {
         tankCapacity = double.parse(event.snapshot.value.toString());
-        debugPrint("Tank Capacity: $tankCapacity");
+        // debugPrint("Tank Capacity: $tankCapacity");
       });
     });
   }
 
   void turnOnRelay() async {
-    var url = Uri.parse('http://192.168.1.34:80/on');
+    var url = Uri.parse('http://192.168.1.35/on');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -59,7 +57,7 @@ class _SoilMoistureState extends State<SoilMoisture> {
   }
 
   void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.1.34:80/off');
+    var url = Uri.parse('http://192.168.1.35/off');
     var response = await http.get(url as Uri);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -142,7 +140,7 @@ class _SoilMoistureState extends State<SoilMoisture> {
                         double.parse(event.snapshot.value.toString());
                     soilMoisture =
                         double.parse(soilMoisture.toStringAsFixed(3));
-                    debugPrint("Moisture: $soilMoisture");
+                    // debugPrint("Moisture: $soilMoisture");
                     // addData();
                   });
 

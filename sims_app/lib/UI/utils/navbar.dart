@@ -33,13 +33,13 @@ class _AppDrawerState extends State<AppDrawer> {
       ref.child(UserId).child('User Name').onValue.listen((event) {
         setState(() {
           userName = event.snapshot.value.toString();
-          debugPrint("User Name: $userName");
+          // debugPrint("User Name: $userName");
         });
       });
       ref.child(UserId).child('User email').onValue.listen((event) {
         setState(() {
           userEmail = event.snapshot.value.toString();
-          debugPrint("User email: $userEmail");
+          // debugPrint("User email: $userEmail");
         });
       });
     });
