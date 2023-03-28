@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import '../utils/bool.dart';
+import 'home_screen.dart';
 
 import '../auth/login_screen.dart';
 import '../utils/utils.dart';
@@ -24,7 +26,7 @@ class SoilMoisture extends StatefulWidget {
 }
 
 class _SoilMoistureState extends State<SoilMoisture> {
-  bool isOn = false;
+  // bool isOn = false;
   late Function currentFunction;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   bool loading = false;
@@ -40,24 +42,19 @@ class _SoilMoistureState extends State<SoilMoisture> {
     final user = FirebaseAuth.instance.currentUser;
     setState(() {
       UserId = user!.uid;
-      ref.child(UserId).child('Tank Capacity').onValue.listen((event) {
-        tankCapacity = double.parse(event.snapshot.value.toString());
-        // debugPrint("Tank Capacity: $tankCapacity");
-      });
     });
   }
 
   void turnOnRelay() async {
-    var url = Uri.parse('http://192.168.1.35/on');
+    var url = Uri.parse('http://192.168.1.34/on');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
-
     Utils().successMessage("Motor On");
   }
 
   void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.1.35/off');
+    var url = Uri.parse('http://192.168.1.34/off');
     var response = await http.get(url as Uri);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -68,7 +65,6 @@ class _SoilMoistureState extends State<SoilMoisture> {
     setState(() {
       isOn = !isOn;
     });
-
     isOn ? turnOnRelay() : turnOffRelay();
   }
 
@@ -117,18 +113,17 @@ class _SoilMoistureState extends State<SoilMoisture> {
               style: TextStyle(color: Colors.blue, fontSize: 20),
             ),
             SizedBox(height: 15),
-            Text("\t\t\tThe Soil Moisture level of the field is measured continously and displayed in terms of percentage here.",
-            style: TextStyle(
-              fontSize: 18
-              ),
-              textAlign: TextAlign.justify),
+            Text(
+                "\t\t\tThe Soil Moisture level of the field is measured continously and displayed in terms of percentage here.",
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.justify),
             SizedBox(height: 15),
             Center(
                 child: StreamBuilder(
               stream: ref.onValue,
               builder: (context, AsyncSnapshot<dynamic> snapshot) {
                 if (!snapshot.hasData) {
-                  debugPrint("$soilMoisture");
+                  // debugPrint("$soilMoisture");
                   return CircularProgressIndicator();
                 } else {
                   ref
@@ -141,7 +136,6 @@ class _SoilMoistureState extends State<SoilMoisture> {
                     soilMoisture =
                         double.parse(soilMoisture.toStringAsFixed(3));
                     // debugPrint("Moisture: $soilMoisture");
-                    // addData();
                   });
 
                   return SfRadialGauge(
@@ -190,13 +184,15 @@ class _SoilMoistureState extends State<SoilMoisture> {
                 }
               },
             )),
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             Text(
-              "Need to water the Field? Try turning the motor ON..",
+              isOn
+                  ? 'Water motor ON. Tap to turn it OFF'
+                  : "Tap the button to water the field",
               textAlign: TextAlign.justify,
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: 16),
             ),
-            SizedBox(height: 10),
+            SizedBox(height: 15),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -204,15 +200,13 @@ class _SoilMoistureState extends State<SoilMoisture> {
                   onPressed: () {
                     toggleButton();
                   },
-                  child: Icon(isOn
-                      ? Icons.stop
-                      : Icons.play_arrow_sharp),
+                  child: Icon(isOn ? Icons.stop : Icons.play_arrow_sharp),
                   style: ElevatedButton.styleFrom(
                     shape: CircleBorder(),
-                    padding: EdgeInsets.all(18),
+                    padding: EdgeInsets.all(17),
                     minimumSize: Size(10, 10),
                   ),
-                ),                
+                ),
               ],
             )
           ],

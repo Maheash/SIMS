@@ -149,26 +149,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                 ),
                 const SizedBox(height: 30),
-                InkWell(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => LogInWithPhoneNumber()));
-                  },
-                  child: Container(
-                    height: 50,
-                    width: 150,
-                    decoration: BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: Center(
-                        child: Text(
-                      "Login with Phone",
-                      style: TextStyle(color: Colors.white),
-                    )),
-                  ),
-                )
+                // InkWell(
+                //   onTap: () {
+                //     Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //             builder: (context) => LogInWithPhoneNumber()));
+                //   },
+                //   child: Container(
+                //     height: 50,
+                //     width: 150,
+                //     decoration: BoxDecoration(
+                //         color: Colors.blue,
+                //         borderRadius: BorderRadius.circular(10)),
+                //     child: Center(
+                //         child: Text(
+                //       "Login with Phone",
+                //       style: TextStyle(color: Colors.white),
+                //     )),
+                //   ),
+                // )
               ]),
         ),
       ),

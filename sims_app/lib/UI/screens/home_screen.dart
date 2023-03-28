@@ -7,8 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
+import '../utils/bool.dart';
 import '../utils/utils.dart';
-import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 
@@ -20,10 +20,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  bool isOn = false;
+  // bool isOn = false;
   late Function currentFunction;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final auth = FirebaseAuth.instance;
+  // ignore: non_constant_identifier_names
   String UserId = " ";
   final databaseRef = FirebaseDatabase.instance.ref('realtimeSoilData');
 
@@ -33,23 +34,42 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       UserId = user!.uid;
     });
+    MotorStatus();
+  }
+
+  // ignore: non_constant_identifier_names
+  Future<bool> MotorStatus() async {
+    var url = Uri.parse('http://192.168.1.34/status');
+    var response = await http.get(url);
+    if (response.body == "ON") {
+      isOn = true;
+      debugPrint("isOn value is updated as True");
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response body: ${response.body}');
+      return true;
+    } else if (response.body == 'OFF') {
+      isOn = false;
+      debugPrint("isOn value is updated as False");
+      debugPrint('Response status: ${response.statusCode}');
+      debugPrint('Response body: ${response.body}');
+      return false;
+    }
+    return false;
   }
 
   void turnOnRelay() async {
-    var url = Uri.parse('http://192.168.1.35/on');
+    var url = Uri.parse('http://192.168.1.34/on');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
-
     Utils().successMessage("Motor On");
   }
 
   void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.1.35/off');
-    var response = await http.get(url as Uri);
+    var url = Uri.parse('http://192.168.1.34/off');
+    var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
-
     Utils().toastMessage("Motor Off");
   }
 
@@ -57,7 +77,6 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       isOn = !isOn;
     });
-
     isOn ? turnOnRelay() : turnOffRelay();
   }
 
@@ -108,7 +127,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Card(
-                        elevation: 8.0,
+                          elevation: 8.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -126,9 +145,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(height: 10),
                   Row(
                     children: [
-                      SizedBox(width:206,
-                      child: Card(
-                        elevation: 8.0,
+                      SizedBox(
+                        width: 206,
+                        child: Card(
+                          elevation: 8.0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
@@ -143,7 +163,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
                                 double moistureLevel =
-                                    (snapshot.data.snapshot.value ?? 0.00 as double).toDouble();
+                                    (snapshot.data.snapshot.value ??
+                                            0.00 as double)
+                                        .toDouble();
                                 String moistureText;
                                 if (moistureLevel < 20) {
                                   moistureText = 'DRY';
@@ -165,11 +187,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Soil Moisture',
+                                      const Text('Soil Moisture',
                                           style: TextStyle(
                                             fontSize: 16,
                                           )),
-                                      SizedBox(height: 10.0),
+                                      const SizedBox(height: 10.0),
                                       Text(
                                         moistureText,
                                         style: TextStyle(
@@ -204,8 +226,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10.0),
                         ),
-                        color: Colors.amberAccent,
-                        shadowColor: Colors.amberAccent,
+                        color: Colors.amber,
+                        shadowColor: Colors.amber,
                         child: StreamBuilder<dynamic>(
                           stream: databaseRef
                               .child(UserId)
@@ -222,13 +244,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text('Temperature',
-                                        style: TextStyle(fontSize: 16)),
+                                        style: TextStyle(
+                                            fontSize: 16, color: Colors.white)),
                                     SizedBox(height: 10.0),
                                     Text(
                                       "$tempLevel°C",
                                       style: TextStyle(
-                                        fontSize: 35.0,
-                                      ),
+                                          fontSize: 35.0, color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -262,7 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 AsyncSnapshot<dynamic> snapshot) {
                               if (snapshot.hasData) {
                                 double waterLeft =
-                                    (snapshot.data.snapshot.value ?? 0 as double).toDouble();
+                                    (snapshot.data.snapshot.value ??
+                                            0 as double)
+                                        .toDouble();
                                 waterLeft = 250 - waterLeft;
                                 waterLeft =
                                     double.parse(waterLeft.toStringAsFixed(2));
@@ -272,11 +296,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text('Water in the Tank',
+                                      const Text('Water in the Tank',
                                           style: TextStyle(fontSize: 20)),
                                       SizedBox(height: 10.0),
                                       Text("$waterLeft litres left",
-                                          style: TextStyle(
+                                          style: const TextStyle(
                                               fontSize: 35.0,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.blue)),
@@ -285,7 +309,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 );
                               } else {
-                                return Center(
+                                return const Center(
                                     child: CircularProgressIndicator());
                               }
                             },
@@ -304,36 +328,58 @@ class _HomeScreenState extends State<HomeScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
-                          color: Color.fromARGB(255, 200, 239, 218),
-                          shadowColor: Color.fromARGB(255, 200, 239, 218),
-                          child: Padding(
-                            padding: EdgeInsets.all(10),
-                            child: Column(children: [
-                              Text(
-                                "Motor controls",
-                                textAlign: TextAlign.justify,
-                                style: TextStyle(fontSize: 20),
-                              ),
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () {
-                                      toggleButton();
-                                    },
-                                    child: Icon(isOn
-                                        ? Icons.stop
-                                        : Icons.play_arrow_sharp),
-                                    style: ElevatedButton.styleFrom(
-                                      shape: CircleBorder(),
-                                      padding: EdgeInsets.all(14),
-                                      minimumSize: Size(10, 10),
+                          color: Color.fromARGB(255, 235, 116, 116),
+                          shadowColor: Color.fromARGB(255, 235, 116, 116),
+                          child: Center(
+                            child: StreamBuilder<dynamic>(
+                              stream: databaseRef
+                                  .child(UserId)
+                                  .child('Soil Moisture')
+                                  .onValue,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.hasData) {
+                                  return Padding(
+                                    padding: EdgeInsets.all(16.0),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          isOn ? 'Water Motor: ON' : 'Water Motor: OFF',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                          ),
+                                        ),
+                                        SizedBox(height: 10,),
+                                        SizedBox(width: 100,),
+                                          Center(
+                                            child: ElevatedButton(
+                                            onPressed: () {
+                                              toggleButton();
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              shadowColor: Colors.blue,
+                                              shape: CircleBorder(),
+                                              padding: EdgeInsets.all(14),
+                                              minimumSize: Size(10, 10),
+                                            ),
+                                            child: Icon(isOn
+                                                ? Icons.stop
+                                                : Icons.play_arrow_sharp),
+                                          ),
+                                          )
+                                      ],
                                     ),
-                                  ),
-                                ],
-                              )
-                            ]),
+                                  );
+                                } else {
+                                  return Center(
+                                      child: CircularProgressIndicator());
+                                }
+                              },
+                            ),
                           ),
                         ),
                       ),
