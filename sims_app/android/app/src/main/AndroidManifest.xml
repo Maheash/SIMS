@@ -2,7 +2,7 @@
     package="com.example.sims_app">
 <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
    <application
-        android:label="sims_app"
+        android:label="SIMS"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

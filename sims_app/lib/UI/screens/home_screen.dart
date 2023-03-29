@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:SIMS/UI/auth/login_screen.dart';
 import 'package:SIMS/UI/screens/profile_screen.dart';
 import 'package:SIMS/UI/screens/soil_moisture.dart';
@@ -39,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // ignore: non_constant_identifier_names
   Future<bool> MotorStatus() async {
-    var url = Uri.parse('http://192.168.1.34/status');
+    var url = Uri.parse('http://192.168.43.248/status');
     var response = await http.get(url);
     if (response.body == "ON") {
       isOn = true;
@@ -47,18 +48,17 @@ class _HomeScreenState extends State<HomeScreen> {
       debugPrint('Response status: ${response.statusCode}');
       debugPrint('Response body: ${response.body}');
       return true;
-    } else if (response.body == 'OFF') {
+    } else{
       isOn = false;
-      debugPrint("isOn value is updated as False");
-      debugPrint('Response status: ${response.statusCode}');
-      debugPrint('Response body: ${response.body}');
+      // debugPrint("isOn value is updated as False");
+      // debugPrint('Response status: ${response.statusCode}');
+      // debugPrint('Response body: ${response.body}');
       return false;
     }
-    return false;
   }
 
   void turnOnRelay() async {
-    var url = Uri.parse('http://192.168.1.34/on');
+    var url = Uri.parse('http://192.168.43.248/on');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.1.34/off');
+    var url = Uri.parse('http://192.168.43.248/off');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -287,7 +287,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     (snapshot.data.snapshot.value ??
                                             0 as double)
                                         .toDouble();
-                                waterLeft = 250 - waterLeft;
+                                waterLeft = 0.64 - waterLeft;
                                 waterLeft =
                                     double.parse(waterLeft.toStringAsFixed(2));
                                 return Padding(
@@ -331,32 +331,30 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Color.fromARGB(255, 235, 116, 116),
                           shadowColor: Color.fromARGB(255, 235, 116, 116),
                           child: Center(
-                            child: StreamBuilder<dynamic>(
-                              stream: databaseRef
-                                  .child(UserId)
-                                  .child('Soil Moisture')
-                                  .onValue,
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<dynamic> snapshot) {
-                                if (snapshot.hasData) {
-                                  return Padding(
+                            child: Padding(
                                     padding: EdgeInsets.all(16.0),
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          isOn ? 'Water Motor: ON' : 'Water Motor: OFF',
+                                          isOn
+                                              ? 'Water Motor: ON'
+                                              : 'Water Motor: OFF',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                             fontSize: 18,
                                             color: Colors.white,
                                           ),
                                         ),
-                                        SizedBox(height: 10,),
-                                        SizedBox(width: 100,),
-                                          Center(
-                                            child: ElevatedButton(
+                                        SizedBox(
+                                          height: 10,
+                                        ),
+                                        SizedBox(
+                                          width: 100,
+                                        ),
+                                        Center(
+                                          child: ElevatedButton(
                                             onPressed: () {
                                               toggleButton();
                                             },
@@ -370,16 +368,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 ? Icons.stop
                                                 : Icons.play_arrow_sharp),
                                           ),
-                                          )
+                                        )
                                       ],
                                     ),
-                                  );
-                                } else {
-                                  return Center(
-                                      child: CircularProgressIndicator());
-                                }
-                              },
-                            ),
+                                  )
                           ),
                         ),
                       ),

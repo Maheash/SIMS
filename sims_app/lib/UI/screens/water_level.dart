@@ -17,33 +17,33 @@ class WaterLevel extends StatefulWidget {
 }
 
 class _WaterLevelState extends State<WaterLevel> {
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-    bool loading = false;
-    final auth = FirebaseAuth.instance;
-    final ref = FirebaseDatabase.instance.ref('realtimeSoilData');
-    String UserId = '';
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  bool loading = false;
+  final auth = FirebaseAuth.instance;
+  final ref = FirebaseDatabase.instance.ref('realtimeSoilData');
+  String UserId = '';
 
-    double soilMoisture = 0.0;
-    double tankVolume = 0.0;
-    double tankCapacity = 250;
-    double value = 0;
-    String val = "";
+  double soilMoisture = 0.0;
+  double tankVolume = 0.0;
+  double tankCapacity = 0.500;
+  double value = 0;
+  String val = "";
 
-    void initState() {
-      final user = FirebaseAuth.instance.currentUser;
-      setState(() {
-        UserId = user!.uid;
-        ref.child(UserId).child('Tank Capacity').onValue.listen((event) {
-          tankCapacity = double.parse(event.snapshot.value.toString());
-          // debugPrint("Tank Capacity: $tankCapacity");
-        });
+  void initState() {
+    final user = FirebaseAuth.instance.currentUser;
+    setState(() {
+      UserId = user!.uid;
+      ref.child(UserId).child('Tank Capacity').onValue.listen((event) {
+        tankCapacity = double.parse(event.snapshot.value.toString());
+        // debugPrint("Tank Capacity: $tankCapacity");
       });
-    }
+    });
+  }
 
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-        key: _scaffoldKey,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
         centerTitle: true,
         automaticallyImplyLeading: false,
@@ -71,26 +71,28 @@ class _WaterLevelState extends State<WaterLevel> {
         ],
       ),
       drawer: const AppDrawer(),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(
-                height: 30,
-              ),
-              const Text(
-                "Realtime Water Level Data",
-                style: TextStyle(color: Colors.blue, fontSize: 20),
-              ),
-              SizedBox(height: 10),
-              Text("\t\t\tThe water in the tank is updated in realtime according to the changes in the water level of the tank. Make sure the tank contains enough water so that the field stays irrigated.",
-              style: TextStyle(fontSize:18),
-              textAlign: TextAlign.justify,),
-              const SizedBox(height: 20),
-              Center(
-                  child: StreamBuilder(
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            const SizedBox(
+              height: 30,
+            ),
+            const Text(
+              "Realtime Water Level Data",
+              style: TextStyle(color: Colors.blue, fontSize: 20),
+            ),
+            SizedBox(height: 10),
+            Text(
+              "\t\t\tThe water in the tank is updated in realtime according to the changes in the water level of the tank. Make sure the tank contains enough water so that the field stays irrigated.",
+              style: TextStyle(fontSize: 18),
+              textAlign: TextAlign.justify,
+            ),
+            const SizedBox(height: 20),
+            Center(
+              child: StreamBuilder(
                 stream: ref.onValue,
                 builder: (context, AsyncSnapshot<dynamic> snapshot) {
                   if (!snapshot.hasData) {
@@ -103,9 +105,10 @@ class _WaterLevelState extends State<WaterLevel> {
                         .listen((event) {
                       tankVolume =
                           double.parse(event.snapshot.value.toString());
+                      debugPrint("Tank Volume: $tankVolume");
                       tankVolume = tankCapacity - tankVolume;
                       tankVolume = double.parse(tankVolume.toStringAsFixed(3));
-                      // debugPrint("Water left: $tankVolume");
+                      debugPrint("Water left: $tankVolume");
                     });
 
                     return SfRadialGauge(axes: <RadialAxis>[
@@ -132,7 +135,7 @@ class _WaterLevelState extends State<WaterLevel> {
                                       padding:
                                           const EdgeInsets.fromLTRB(0, 2, 0, 0),
                                       child: Text(
-                                        'litres left',
+                                        'millilitres left',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontStyle: FontStyle.italic,
@@ -144,8 +147,9 @@ class _WaterLevelState extends State<WaterLevel> {
                             GaugeAnnotation(
                               widget: Text("Water level",
                                   style: TextStyle(
-                                      color: Colors.blue, 
-                                      fontSize: 18,)),
+                                    color: Colors.blue,
+                                    fontSize: 18,
+                                  )),
                               positionFactor: 1,
                               angle: 90,
                             ),
@@ -186,16 +190,17 @@ class _WaterLevelState extends State<WaterLevel> {
                   }
                 },
               ),
-              ),
-              const SizedBox(
+            ),
+            const SizedBox(
               height: 20,
             ),
-            Text("\t\t\tTo avoid worst cases, make sure the tank is always available with enough water.",
-            style: TextStyle(fontSize: 18),
-            textAlign: TextAlign.justify)              
-            ],
-          ),
+            Text(
+                "\t\t\tTo avoid worst cases, make sure the tank is always available with enough water.",
+                style: TextStyle(fontSize: 18),
+                textAlign: TextAlign.justify)
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
+}
