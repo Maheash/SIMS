@@ -27,38 +27,40 @@ class _HomeScreenState extends State<HomeScreen> {
   final auth = FirebaseAuth.instance;
   // ignore: non_constant_identifier_names
   String UserId = " ";
+  String motorStatus = " ";
   final databaseRef = FirebaseDatabase.instance.ref('realtimeSoilData');
+  double tankCapacity = 0.00;
 
   void initState() {
     super.initState();
     final user = FirebaseAuth.instance.currentUser;
     setState(() {
       UserId = user!.uid;
+      debugPrint("$UserId");
     });
-    MotorStatus();
-  }
+    databaseRef.child(UserId).child('Tank Capacity').onValue.listen((event) {
+      tankCapacity = double.parse(event.snapshot.value.toString());
+      debugPrint("Tank Capacity: $tankCapacity");
+    });
 
-  // ignore: non_constant_identifier_names
-  Future<bool> MotorStatus() async {
-    var url = Uri.parse('http://192.168.43.248/status');
-    var response = await http.get(url);
-    if (response.body == "ON") {
-      isOn = true;
-      debugPrint("isOn value is updated as True");
-      debugPrint('Response status: ${response.statusCode}');
-      debugPrint('Response body: ${response.body}');
-      return true;
-    } else{
-      isOn = false;
-      // debugPrint("isOn value is updated as False");
-      // debugPrint('Response status: ${response.statusCode}');
-      // debugPrint('Response body: ${response.body}');
-      return false;
-    }
+    databaseRef.child(UserId).child('Motor').onValue.listen((event) {
+      motorStatus = event.snapshot.value.toString();
+      debugPrint("Motor status : $motorStatus ");
+       if (motorStatus.trim().toLowerCase() == "on") {
+        setState(() {
+          isOn = true;
+        });
+        debugPrint("$isOn");
+      } else {
+        setState(() {
+          isOn = false;
+        });
+      }
+    });
   }
 
   void turnOnRelay() async {
-    var url = Uri.parse('http://192.168.43.248/on');
+    var url = Uri.parse('http://192.168.1.33/on');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -66,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.43.248/off');
+    var url = Uri.parse('http://192.168.1.33/off');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -146,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Row(
                     children: [
                       SizedBox(
-                        width: 206,
+                        width: 204,
                         child: Card(
                           elevation: 8.0,
                           shape: RoundedRectangleBorder(
@@ -195,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Text(
                                         moistureText,
                                         style: TextStyle(
-                                            fontSize: 35.0,
+                                            fontSize: 30.0,
                                             fontWeight: FontWeight.bold,
                                             color: moistureText == 'DRY'
                                                 ? Colors.red
@@ -250,7 +252,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     Text(
                                       "$tempLevel°C",
                                       style: TextStyle(
-                                          fontSize: 35.0, color: Colors.white),
+                                          fontSize: 30.0, color: Colors.white),
                                     ),
                                   ],
                                 ),
@@ -287,7 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     (snapshot.data.snapshot.value ??
                                             0 as double)
                                         .toDouble();
-                                waterLeft = 0.64 - waterLeft;
+                                waterLeft = tankCapacity - waterLeft;
                                 waterLeft =
                                     double.parse(waterLeft.toStringAsFixed(2));
                                 return Padding(
@@ -301,7 +303,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       SizedBox(height: 10.0),
                                       Text("$waterLeft litres left",
                                           style: const TextStyle(
-                                              fontSize: 35.0,
+                                              fontSize: 30.0,
                                               fontWeight: FontWeight.bold,
                                               color: Colors.blue)),
                                       SizedBox(height: 10),
@@ -331,48 +333,44 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: Color.fromARGB(255, 235, 116, 116),
                           shadowColor: Color.fromARGB(255, 235, 116, 116),
                           child: Center(
-                            child: Padding(
-                                    padding: EdgeInsets.all(16.0),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          isOn
-                                              ? 'Water Motor: ON'
-                                              : 'Water Motor: OFF',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        SizedBox(
-                                          width: 100,
-                                        ),
-                                        Center(
-                                          child: ElevatedButton(
-                                            onPressed: () {
-                                              toggleButton();
-                                            },
-                                            style: ElevatedButton.styleFrom(
-                                              shadowColor: Colors.blue,
-                                              shape: CircleBorder(),
-                                              padding: EdgeInsets.all(14),
-                                              minimumSize: Size(10, 10),
-                                            ),
-                                            child: Icon(isOn
-                                                ? Icons.stop
-                                                : Icons.play_arrow_sharp),
-                                          ),
-                                        )
-                                      ],
+                              child: Padding(
+                            padding: EdgeInsets.all(16.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  isOn ? 'Water Motor: ON' : 'Water Motor: OFF',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                SizedBox(
+                                  width: 100,
+                                ),
+                                Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      toggleButton();
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      shadowColor: Colors.blue,
+                                      shape: CircleBorder(),
+                                      padding: EdgeInsets.all(14),
+                                      minimumSize: Size(10, 10),
                                     ),
-                                  )
-                          ),
+                                    child: Icon(isOn
+                                        ? Icons.stop
+                                        : Icons.play_arrow_sharp),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )),
                         ),
                       ),
                     ],

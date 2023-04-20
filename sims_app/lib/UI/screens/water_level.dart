@@ -35,7 +35,7 @@ class _WaterLevelState extends State<WaterLevel> {
       UserId = user!.uid;
       ref.child(UserId).child('Tank Capacity').onValue.listen((event) {
         tankCapacity = double.parse(event.snapshot.value.toString());
-        // debugPrint("Tank Capacity: $tankCapacity");
+        debugPrint("Tank Capacity: $tankCapacity");
       });
     });
   }
@@ -135,7 +135,7 @@ class _WaterLevelState extends State<WaterLevel> {
                                       padding:
                                           const EdgeInsets.fromLTRB(0, 2, 0, 0),
                                       child: Text(
-                                        'millilitres left',
+                                        'litres left',
                                         style: TextStyle(
                                             fontWeight: FontWeight.bold,
                                             fontStyle: FontStyle.italic,
