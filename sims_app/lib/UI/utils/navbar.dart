@@ -92,14 +92,14 @@ class _AppDrawerState extends State<AppDrawer> {
                   builder: (BuildContext context) => WaterLevel()));
             },
           ),
-          ListTile(
-            leading: Icon(Icons.person),
-            title: Text("Profile"),
-            onTap: () {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(
-                  builder: (BuildContext context) => ProfileScreen()));
-            },
-          ),
+          // ListTile(
+          //   leading: Icon(Icons.person),
+          //   title: Text("Profile"),
+          //   onTap: () {
+          //     Navigator.of(context).pushReplacement(MaterialPageRoute(
+          //         builder: (BuildContext context) => ProfileScreen()));
+          //   },
+          // ),
           // ListTile(
           //   leading: Icon(Icons.data_exploration),
           //   title: Text("History"),

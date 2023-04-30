@@ -60,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void turnOnRelay() async {
-    var url = Uri.parse('http://192.168.1.33/on');
+    var url = Uri.parse('http://192.168.43.248/on');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void turnOffRelay() async {
-    var url = Uri.parse('http://192.168.1.33/off');
+    var url = Uri.parse('http://192.168.43.248/off');
     var response = await http.get(url);
     debugPrint('Response status: ${response.statusCode}');
     debugPrint('Response body: ${response.body}');
